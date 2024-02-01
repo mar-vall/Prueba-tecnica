@@ -15,20 +15,26 @@ const registerForm = () => {
       confirmPassword: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("User name is required"),
-      email: Yup.string()
-        .email("Correo electrónico no válido")
-        .required("El correo electrónico es obligatorio"),
-      phone: Yup.number().required("Phone number is required"),
-      password: Yup.string().required("La contraseña es obligatoria"),
-      confirmPassword: Yup.string().required("Confirm your password"),
+      username: Yup.string()
+        .max(32, "Must be 32 characters or less")
+        .required("User name is required"),
+      email: Yup.string().email("Invalid email").required("Email is required"),
+      phone: Yup.string()
+        .matches(/^\d+$/, "Invalid phone number")
+        .required("Phone number is required"),
+      password: Yup.string()
+        .min(6, "Password must be at least 6 characters")
+        .required("Password is required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .required("Confirm your password"),
     }),
     onSubmit: (values) => {
       // Lógica de inicio de sesión
       console.log("Datos del formulario:", values);
     },
   });
-  
+
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div className="w-full p-10 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -97,7 +103,7 @@ const registerForm = () => {
               Phone
             </label>
             <input
-              type="tel"
+              type="text"
               name="phone"
               id="phone"
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
