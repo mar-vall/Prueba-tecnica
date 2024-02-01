@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className="">
       <div className="">
-        <Login/>
+        
         <RegisterForm/>
       </div>
     </main>
