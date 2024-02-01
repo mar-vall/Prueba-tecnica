@@ -4,6 +4,8 @@ import Link from "next/link";
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {auth} from '../app/firebase'
 
 const registerForm = () => {
   const formik = useFormik({
@@ -29,9 +31,20 @@ const registerForm = () => {
         .oneOf([Yup.ref("password"), null], "Passwords must match")
         .required("Confirm your password"),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // Lógica de inicio de sesión
       console.log("Datos del formulario:", values);
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth,
+            values.email,
+            values.password
+          );
+        // Signed up
+        const user = userCredential.user;
+        console.log('user', user)
+      } catch (error) {
+        console.error('Error al registrar usuario:', error.message);
+      }
     },
   });
 
