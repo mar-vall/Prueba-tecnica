@@ -5,7 +5,6 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "next/router";
 
 const Login = () => {
   const {signin, user, logout, loginError} = useAuth()
