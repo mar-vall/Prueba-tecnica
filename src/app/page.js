@@ -5,6 +5,7 @@ export default function Home() {
     <main className="">
       hola!
       <Link href='/login' className="bg-slate-900 text-white">Log in</Link>
+      <Link href='/register' className="bg-slate-900 text-white">Log in</Link>
       
     </main>
   );

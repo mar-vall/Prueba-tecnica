@@ -1,14 +1,16 @@
 import React from "react";
 import ProtectedRoute from "@/Components/protectedRoute";
 
+
 const userPage = () => {
+  
   return (
-    
-      <div>
-        <h1>Página Protegida</h1>
-        {/* Contenido de la página protegida */}
-      </div>
-    
+    <div>
+        usuario
+      <button className="bg-blue-700 rounded-md">
+        Cerrar sesion
+      </button>
+    </div>
   );
 };
 

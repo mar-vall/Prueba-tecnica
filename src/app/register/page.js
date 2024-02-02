@@ -5,7 +5,7 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../app/firebase'
+import {auth} from '../firebase'
 
 const registerForm = () => {
   const formik = useFormik({

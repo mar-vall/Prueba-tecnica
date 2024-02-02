@@ -4,8 +4,12 @@ import Link from "next/link";
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useAuth } from "../context/AuthContext";
+import { useRouter } from "next/router";
 
 const Login = () => {
+  const {signin} = useAuth()
+  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -20,6 +24,7 @@ const Login = () => {
     onSubmit: (values) => {
       // Lógica de inicio de sesión
       console.log("Datos del formulario:", values);
+      signin(values)
     },
   });
 
@@ -106,7 +111,7 @@ const Login = () => {
               <p className="text-sm text-center py-3 font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account?{" "}
                 <Link
-                  href="#"
+                  href="/register"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
                   Create a new account
