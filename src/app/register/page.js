@@ -4,10 +4,11 @@ import Link from "next/link";
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import {auth} from '../firebase'
+import { useAuth } from "../context/AuthContext";
 
 const registerForm = () => {
+  const {signup, successRegister} = useAuth();
+
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -34,26 +35,17 @@ const registerForm = () => {
     onSubmit: async (values) => {
       // Lógica de inicio de sesión
       console.log("Datos del formulario:", values);
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth,
-            values.email,
-            values.password
-          );
-        // Signed up
-        const user = userCredential.user;
-        console.log('user', user)
-      } catch (error) {
-        console.error('Error al registrar usuario:', error.message);
-      }
+      signup(values);
     },
   });
 
   return (
     <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div className="w-full p-10 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-        <Link href="#" className="">
+        <Link href="/login" className="">
           Volver
         </Link>
+        {successRegister && (<div><Link href='/login' className="p-2 bg-green-300">{successRegister}</Link></div>)}
         <h4 className="text-3xl font-bold text-blue-800 text-center pt-10">
           Create Account
         </h4>

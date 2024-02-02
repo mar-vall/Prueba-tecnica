@@ -1,7 +1,7 @@
 'use client'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { auth } from '../firebase';
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { redirect } from 'next/dist/server/api-utils';
 
 const AuthContext = createContext()
@@ -9,23 +9,33 @@ const AuthContext = createContext()
 export const AuthContextProvider = ({children}) => {
     const [user, setUser] = useState(null)
     const [loginError, setLoginError] = useState('')
+    const [successRegister, setSuccessRegister] = useState('')
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
             setUser(authUser);
-            console.log('useEffect', authUser)
         });
         
         return () => unsubscribe();
     }, [])
 
+    const signup = async (values) => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth,
+                values.email,
+                values.password
+              );
+            setSuccessRegister("Succesful register. Now sign in")
+            console.log('user', user)
+          } catch (error) {
+            console.error('Error al registrar usuario:', error.message);
+          }
+    }
+
     const signin = async (value) => {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, value.email, value.password);
-            if(userCredential.user){
             setUser(userCredential.user);
-            console.log('userFIrebase', userCredential.user)
-            }
         } catch (error) {
             console.error(error)
             setLoginError('Invalid credentials')
@@ -42,7 +52,7 @@ export const AuthContextProvider = ({children}) => {
             }
 
     }
-    return(<AuthContext.Provider value={{user, signin, logout, loginError}}>{children}</AuthContext.Provider>)
+    return(<AuthContext.Provider value={{user, signin, signup, logout, loginError, successRegister}}>{children}</AuthContext.Provider>)
 }
 
 export const useAuth = () => {
