@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/router";
 
 const Login = () => {
-  const {signin} = useAuth()
+  const {signin, user, logout, loginError} = useAuth()
   
   const formik = useFormik({
     initialValues: {
@@ -17,19 +17,23 @@ const Login = () => {
     },
     validationSchema: Yup.object({
       email: Yup.string()
-        .email("Correo electrónico no válido")
-        .required("El correo electrónico es obligatorio"),
-      password: Yup.string().required("La contraseña es obligatoria"),
+        .email("Invalid email")
+        .required("Email is required"),
+      password: Yup.string().required("Password is required"),
     }),
     onSubmit: (values) => {
       // Lógica de inicio de sesión
-      console.log("Datos del formulario:", values);
       signin(values)
     },
   });
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
+    <>
+    {user ? (<><p>Hola {user.email}</p>
+            <button className="bg-blue-700 rounded-md" onClick={() => logout()}>Cerrar sesion</button>
+</>
+    ) :(
+      <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full p-10 bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -93,6 +97,7 @@ const Login = () => {
                 {formik.touched.password && formik.errors.password && (
                   <div className="text-sm text-red-600">{formik.errors.password}</div>
                 )}
+                {loginError && (<div className="text-sm text-red-600">{loginError}</div>)}
               </div>
               <div className="flex items-center justify-end pb-3">
                 <Link
@@ -122,6 +127,9 @@ const Login = () => {
         </div>
       </div>
     </section>
+    )}
+    
+  </>
   );
 };
 

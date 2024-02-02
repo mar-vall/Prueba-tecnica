@@ -8,10 +8,12 @@ const AuthContext = createContext()
 
 export const AuthContextProvider = ({children}) => {
     const [user, setUser] = useState(null)
+    const [loginError, setLoginError] = useState('')
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((authUser) => {
             setUser(authUser);
+            console.log('useEffect', authUser)
         });
         
         return () => unsubscribe();
@@ -26,6 +28,7 @@ export const AuthContextProvider = ({children}) => {
             }
         } catch (error) {
             console.error(error)
+            setLoginError('Invalid credentials')
         }
         
     }
@@ -39,7 +42,7 @@ export const AuthContextProvider = ({children}) => {
             }
 
     }
-    return(<AuthContext.Provider value={{user, signin, logout}}>{children}</AuthContext.Provider>)
+    return(<AuthContext.Provider value={{user, signin, logout, loginError}}>{children}</AuthContext.Provider>)
 }
 
 export const useAuth = () => {
