@@ -1,13 +1,11 @@
-import Login from "@/Components/loginForm";
-import RegisterForm from "@/Components/registerForm";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <main className="">
-      <div className="">
-        
-        <RegisterForm/>
-      </div>
+      hola!
+      <Link href='/login' className="bg-slate-900 text-white">Log in</Link>
+      
     </main>
   );
 }
